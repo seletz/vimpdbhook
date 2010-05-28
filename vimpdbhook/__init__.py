@@ -1,4 +1,5 @@
 import os
+import time
 from os.path import exists
 from os import system
 
@@ -7,7 +8,13 @@ import appscript
 
 def activate_terminal():
     terminal_program = os.environ.get("VIMPDBHOOK_TERMINAL_APP", "iTerm")
-    appscript.app(terminal_program).activate()
+    limit = 100
+    app = appscript.app(terminal_program)
+    while limit > 0:
+        limit -= 1
+        app.activate()
+        if app.frontmost():
+            return
 
 VIM_KEYS = "%(lineno)dgg<ESC><ESC>:setlocal cursorline<CR>zz"
 
